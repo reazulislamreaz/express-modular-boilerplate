@@ -8,7 +8,6 @@ import { Request, Response } from "express";
 import { AUTH_ERRORS } from "../../constants/auth";
 
 
-// this is test comment
 const register_user = catchAsync(async (req: Request, res: Response) => {
   const result = await auth_services.register_user_into_db(req.body);
   
