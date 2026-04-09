@@ -15,31 +15,32 @@ const requiredEnvVars = [
     'VERIFIED_TOKEN',
 ];
 
-const missingEnvVars = requiredEnvVars.filter(
-    (envVar) => !process.env[envVar]
-);
+const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
+const isProduction = process.env.NODE_ENV === "production";
 
 if (missingEnvVars.length > 0) {
-    console.error('\n❌ Missing required environment variables:');
-    missingEnvVars.forEach(varName => {
-        console.error(`   - ${varName}`);
-    });
-    console.error('\n📝 Copy .env.example to .env and fill in the values:\n');
-    console.error('   cp .env.example .env\n');
-    throw new Error(
-        `Missing required environment variables: ${missingEnvVars.join(', ')}`
-    );
+    const message = `Missing required environment variables: ${missingEnvVars.join(", ")}`;
+    if (isProduction) {
+        throw new Error(message);
+    } else {
+        console.warn(`⚠️ ${message}`);
+    }
 }
 
 // Validate JWT secret strength
 const minSecretLength = 32;
 const validateSecret = (secret: string | undefined, name: string) => {
     if (secret && secret.length < minSecretLength) {
-        throw new Error(
+        const message =
             `${name} must be at least ${minSecretLength} characters long. ` +
             `Current length: ${secret?.length || 0}. ` +
-            `Use a strong random string (e.g., openssl rand -hex 32)`
-        );
+            `Use a strong random string (e.g., openssl rand -hex 32)`;
+
+        if (isProduction) {
+            throw new Error(message);
+        } else {
+            console.warn(`⚠️ ${message}`);
+        }
     }
 };
 

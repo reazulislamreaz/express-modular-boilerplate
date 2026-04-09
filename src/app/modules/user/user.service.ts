@@ -12,8 +12,13 @@ const update_profile_into_db = async (req: Request) => {
   const isExistUser = await Account_Model.findOne({
     email: req?.user?.email,
   }).lean();
+
+  if (!isExistUser) {
+    throw new AppError("Account not found", httpStatus.NOT_FOUND);
+  }
+
   const result = await User_Model.findOneAndUpdate(
-    { accountId: isExistUser!._id },
+    { accountId: isExistUser._id },
     req?.body,
     {
       new: true,

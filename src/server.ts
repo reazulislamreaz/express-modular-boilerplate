@@ -22,7 +22,7 @@ async function main() {
     // Set request timeout
     server.timeout = 30000; // 30 seconds
 
-    app.listen(configs.port as any, configs.ip.backend_ip as any, () => {
+    server.listen(configs.port as any, configs.ip.backend_ip as any, () => {
         console.log(`Server listening on port ${configs.port}`);
         logger.info(`🚀 Server started on port ${configs.port} (${configs.env})`);
     });

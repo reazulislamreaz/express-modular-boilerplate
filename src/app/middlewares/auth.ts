@@ -21,7 +21,7 @@ const auth = (...roles: UserRoleType[]) => {
                 configs.jwt.access_token as string,
             );
 
-            if (!roles.length || !roles.includes(verifiedUser.role as UserRoleType)) {
+            if (roles.length > 0 && !roles.includes(verifiedUser.role as UserRoleType)) {
                 throw new AppError('You are not authorized to access this resource', 401);
             }
 
